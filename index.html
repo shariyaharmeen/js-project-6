@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat:wght@400..700&family=Faculty+Glyphic&family=Handjet:wght@100..900&family=Merienda:wght@300..900&family=Permanent+Marker&family=Rubik+Vinyl&display=swap" rel="stylesheet">
+    <title>Sticky Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://i.pinimg.com/736x/9f/01/e2/9f01e27dd1a49354497583b87d283ec4.jpg');
+           
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .notes-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .note {
+            width: 200px;
+            height: 200px;
+            background: #efe5dc;
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .note textarea {
+            width: 100%;
+            height: 80%;
+            border: none;
+            background: transparent;
+            resize: none;
+            outline: none;
+            font-size: 14px;
+            font-family: "Merienda", serif;
+        }
+
+        .delete-btn {
+            background: #bf7b90;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 30%;
+            text-align: center;
+            align-self: center;
+            font-family: "Faculty Glyphic", serif;
+        }
+
+        #add-note {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #bf7b90;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: "Faculty Glyphic", serif;
+        }
+
+        .container h1 {
+            color: #804759;
+             font-family: "Rubik Vinyl", serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Sticky Notes</h1>
+        <button id="add-note">Add Note</button>
+        <div class="notes-container" id="notes-container"></div>
+    </div>
+    <script>
+        const notesContainer = document.getElementById("notes-container");
+        const addNoteBtn = document.getElementById("add-note");
+
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem("notes")) || [];
+            notesContainer.innerHTML = ""; 9
+            notes.forEach((noteText, index) => createNote(noteText, index));
+        }
+
+        function saveNotes() {
+            const notes = Array.from(document.querySelectorAll(".note textarea")).map(note => note.value);
+            localStorage.setItem("notes", JSON.stringify(notes));
+        }
+
+        function createNote(text = "", index) {
+            const note = document.createElement("div");
+            note.classList.add("note");
+
+            note.innerHTML = `
+                <textarea>${text}</textarea>
+                <button class="delete-btn">Delete</button>
+            `;
+
+            note.querySelector("textarea").addEventListener("input", saveNotes);
+            note.querySelector(".delete-btn").addEventListener("click", () => {
+                note.remove();
+                saveNotes();
+            });
+
+            notesContainer.appendChild(note);
+        }
+
+        addNoteBtn.addEventListener("click", () => {
+            createNote();
+            saveNotes();
+        });
+
+        loadNotes();
+    </script>
+</body>
+
+</html>

@@ -100,6 +100,7 @@
 
         function loadNotes() {
             const notes = JSON.parse(localStorage.getItem("notes")) || [];
+             console.log("LoadNotes:", notes); 
             notesContainer.innerHTML = "";
             notes.forEach((noteText) => createNote(noteText));
         }
@@ -111,6 +112,10 @@
 
         function createNote(text = "") {
             const existingNotes = document.querySelectorAll(".note textarea");
+
+             // Console log to check if there's any empty note
+            console.log("Existing Notes:", existingNotes.length); 
+            
             if (existingNotes.length > 0 && existingNotes[existingNotes.length - 1].value.trim() === "") {
                 alert("Please fill the existing note before adding a new one.");
                 return;
@@ -126,6 +131,9 @@
 
             const textarea = note.querySelector("textarea");
             const deleteBtn = note.querySelector(".delete-btn");
+
+             // Console log to check when a new note is created
+              console.log("New Note Created:", text);
 
             textarea.addEventListener("input", saveNotes);
             deleteBtn.addEventListener("click", () => {

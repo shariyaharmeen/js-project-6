@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat:wght@400..700&family=Faculty+Glyphic&family=Handjet:wght@100..900&family=Merienda:wght@300..900&family=Permanent+Marker&family=Rubik+Vinyl&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat:wght@400..700&family=Faculty+Glyphic&family=Handjet:wght@100..900&family=Merienda:wght@300..900&family=Permanent+Marker&family=Rubik+Vinyl&display=swap"
+        rel="stylesheet">
     <title>Sticky Notes App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-image: url('https://i.pinimg.com/736x/9f/01/e2/9f01e27dd1a49354497583b87d283ec4.jpg');
-           
         }
 
         .container {
@@ -82,7 +83,7 @@
 
         .container h1 {
             color: #804759;
-             font-family: "Rubik Vinyl", serif;
+            font-family: "Rubik Vinyl", serif;
         }
     </style>
 </head>
@@ -99,8 +100,8 @@
 
         function loadNotes() {
             const notes = JSON.parse(localStorage.getItem("notes")) || [];
-            notesContainer.innerHTML = ""; 9
-            notes.forEach((noteText, index) => createNote(noteText, index));
+            notesContainer.innerHTML = "";
+            notes.forEach((noteText) => createNote(noteText));
         }
 
         function saveNotes() {
@@ -108,7 +109,13 @@
             localStorage.setItem("notes", JSON.stringify(notes));
         }
 
-        function createNote(text = "", index) {
+        function createNote(text = "") {
+            const existingNotes = document.querySelectorAll(".note textarea");
+            if (existingNotes.length > 0 && existingNotes[existingNotes.length - 1].value.trim() === "") {
+                alert("Please fill the existing note before adding a new one.");
+                return;
+            }
+
             const note = document.createElement("div");
             note.classList.add("note");
 
@@ -117,13 +124,17 @@
                 <button class="delete-btn">Delete</button>
             `;
 
-            note.querySelector("textarea").addEventListener("input", saveNotes);
-            note.querySelector(".delete-btn").addEventListener("click", () => {
+            const textarea = note.querySelector("textarea");
+            const deleteBtn = note.querySelector(".delete-btn");
+
+            textarea.addEventListener("input", saveNotes);
+            deleteBtn.addEventListener("click", () => {
                 note.remove();
                 saveNotes();
             });
 
             notesContainer.appendChild(note);
+            textarea.focus();
         }
 
         addNoteBtn.addEventListener("click", () => {
